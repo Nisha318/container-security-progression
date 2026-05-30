@@ -1,0 +1,53 @@
+name: Stage 1 - Image Security Scan
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'stage-1-docker/**'
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'stage-1-docker/**'
+
+jobs:
+  build-and-scan:
+    name: Build and Scan Container Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -f stage-1-docker/Dockerfile \
+            -t fastapi-app:stage1 \
+            .
+
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: fastapi-app:stage1
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+          trivyignores: .trivyignore
+          output: trivy-results.txt
+
+      - name: Upload Trivy scan results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-scan-results
+          path: trivy-results.txt
+
+      - name: Print scan summary
+        if: always()
+        run: |
+          echo "===== Trivy Scan Summary ====="
+          cat trivy-results.txt || echo "No results file found."

@@ -1,0 +1,11 @@
+# CVE-2026-40356 - krb5 DoS via integer underflow
+# Fix available in 1.20.1-2+deb12u5 but not yet included in distroless base image
+# Tracked: pending distroless image update
+# Risk: DoS only, no code execution, not exploitable in our threat model
+CVE-2026-40356
+
+# CVE-2025-13836 - cpython excessive read buffering DoS in http.client
+# Fix available in 3.11.2-6+deb12u7 but not yet included in distroless base image
+# Tracked: pending distroless image update
+# Risk: DoS via http.client, not used directly in this application
+CVE-2025-13836
