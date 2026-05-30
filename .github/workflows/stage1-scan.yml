@@ -1,6 +1,7 @@
 name: Stage 1 - Image Security Scan
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
