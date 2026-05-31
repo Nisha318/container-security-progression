@@ -19,6 +19,7 @@ build
 venv
 env
 
+
 # Environment files -- never bake secrets into the image
 .env
 .env.*
@@ -28,6 +29,7 @@ env
 stage-2-ecs-fargate/
 stage-3-eks/
 compliance/
+tests/
 
 # Docs and local config
 *.md
