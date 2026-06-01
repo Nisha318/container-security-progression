@@ -117,7 +117,9 @@ container-security-progression/
 │       ├── stage2-pipeline.yml            # Trivy + Checkov + Gitleaks + deploy
 │       └── stage3-pipeline.yml            # Full pipeline + kubectl apply
 ├── compliance/
-│   └── nist-800-53-mapping.md             # Cross-stage control mapping
+│   ├──  nist-800-53-mapping.md             # Cross-stage control mapping
+    └── threat-model.md
+    
 └── docs/
     └── images/
         ├── stage-1/
@@ -145,6 +147,9 @@ container-security-progression/
 ## NIST 800-53 Control Coverage
 
 Controls are mapped progressively -- each stage introduces new or strengthened controls. Full mapping: [`compliance/nist-800-53-mapping.md`](./compliance/nist-800-53-mapping.md)
+
+Threat model: [`compliance/threat-model.md`](./compliance/threat-model.md)
+
 
 | Family | Controls | Stages |
 |---|---|---|
