@@ -1,4 +1,4 @@
-# 🐳 Stage 1: Docker — Image Hardening & Security Baseline
+# 🐳 Stage 1: Docker - Image Hardening & Security Baseline
 
 > **Project:** [From Docker to EKS: A Security-First Progression](../README.md)
 > **Author:** [Nisha](https://nishacloud.com) · [Notes by Nisha](https://notesbynisha.com)

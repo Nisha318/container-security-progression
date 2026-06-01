@@ -1,10 +1,10 @@
-# 🐳 Stage 1: Docker — Image Hardening & Security Baseline
+# From Docker to EKS: A Security-First Progression
 
-> **Project:** [From Docker to EKS: A Security-First Progression](../README.md)
 > **Author:** [Nisha](https://nishacloud.com) · [Notes by Nisha](https://notesbynisha.com)
 
-![Stage](https://img.shields.io/badge/Stage-1%20of%203-blue?style=flat-square)
-![Platform](https://img.shields.io/badge/Platform-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Project](https://img.shields.io/badge/Project-Container%20Security%20Progression-blue?style=flat-square)
+![Stages](https://img.shields.io/badge/Stages-3-blue?style=flat-square)
+![IaC](https://img.shields.io/badge/IaC-OpenTofu-7B42BC?style=flat-square)
 ![CI](https://github.com/nisha318/container-security-progression/actions/workflows/stage1-scan.yml/badge.svg)
 ![Trivy](https://img.shields.io/badge/Scanned%20by-Trivy-1904DA?style=flat-square)
 ![NIST](https://img.shields.io/badge/Compliance-NIST%20800--53-green?style=flat-square)
@@ -14,122 +14,154 @@
 
 ## Overview
 
-This stage establishes the container image security baseline for the project. Before any cloud infrastructure is introduced, the application image is hardened, scanned, and validated through a GitHub Actions pipeline.
+A three-stage project demonstrating security-first container deployment patterns across Docker, Amazon ECS Fargate, and Amazon EKS. Each stage builds on the previous, with an evolving security posture and NIST 800-53 controls mapped throughout.
 
-The same image built here is carried through **Stage 2 (ECS Fargate)** and **Stage 3 (EKS)** unchanged -- demonstrating that security starts at the image layer, not the orchestration layer.
+**Workload:** A lightweight Python FastAPI app used as a consistent workload across all three stages. The app never changes -- the security wrapper around it does.
 
----
-
-## Application
-
-A lightweight **Python FastAPI** app serving as the consistent workload across all three stages.
-
-| Endpoint | Method | Description |
-|---|---|---|
-| `/health` | GET | Returns service health status |
-| `/status` | GET | Returns app name, version, and current stage |
-| `/docs` | GET | Auto-generated API documentation (FastAPI built-in) |
+**Primary controls demonstrated:** Least privilege IAM, secrets management, image scanning, network segmentation, runtime threat detection, and infrastructure as code security.
 
 ---
 
-## Security Controls
+## Architecture
 
-| Control | Implementation |
-|---|---|
-| Non-root execution | `USER appuser` (UID 1001) enforced in Dockerfile |
-| Minimal base image | `python:3.12-slim` -- reduced attack surface |
-| Multi-stage build | Dependencies isolated from runtime image |
-| No secrets in image | Environment variable pattern enforced |
-| Sensitive file exclusion | `.dockerignore` scoped to exclude `.env`, IaC, and IDE files |
-| CVE scanning | Trivy scans on every pipeline run -- fails on HIGH/CRITICAL |
-| Health check | Built-in `HEALTHCHECK` instruction for runtime probing |
+```mermaid
+flowchart LR
+    subgraph Stage1["Stage 1 - Docker"]
+        direction TB
+        A1["FastAPI App"]
+        A2["Distroless Base Image"]
+        A3["Trivy CVE Scan"]
+        A1 --> A2 --> A3
+    end
 
----
+    subgraph Stage2["Stage 2 - ECS Fargate"]
+        direction TB
+        B1["ECR Private Registry"]
+        B2["ECS Fargate Task"]
+        B3["Secrets Manager"]
+        B4["Checkov + Gitleaks"]
+        B4 --> B1 --> B2
+        B3 --> B2
+    end
 
-## NIST 800-53 Control Mapping
+    subgraph Stage3["Stage 3 - EKS"]
+        direction TB
+        C1["EKS Private Cluster"]
+        C2["Kyverno Policies"]
+        C3["Falco Runtime"]
+        C4["GuardDuty"]
+        C2 --> C1
+        C3 --> C1
+        C4 --> C1
+    end
 
-| Control ID | Control Name | Implementation |
-|---|---|---|
-| AC-6 | Least Privilege | Non-root user enforced at container runtime |
-| CM-6 | Configuration Settings | Dockerfile enforces hardened, repeatable configuration |
-| CM-7 | Least Functionality | Minimal base image, no unnecessary packages installed |
-| RA-5 | Vulnerability Scanning | Trivy scans image on every pipeline run |
-| SI-3 | Malicious Code Protection | CVE severity threshold gates pipeline success |
+    subgraph Pipeline["GitHub Actions Pipeline"]
+        direction TB
+        P1["Trivy"]
+        P2["Checkov"]
+        P3["Gitleaks"]
+    end
 
-> Full cross-stage control mapping: [`compliance/nist-800-53-mapping.md`](../compliance/nist-800-53-mapping.md)
+    subgraph Compliance["Compliance"]
+        direction TB
+        N1["NIST 800-53 Mapping"]
+        N2["STRIDE Threat Model"]
+        N3["OpenTofu IaC"]
+    end
 
----
-
-## CI/CD Pipeline
-
-**Workflow:** `.github/workflows/stage1-scan.yml`
-**Triggers:** Push or pull request to `app/` or `stage-1-docker/`
-
+    Stage1 -->|"same image"| Stage2
+    Stage2 -->|"same image"| Stage3
+    Pipeline --> Stage1
+    Pipeline --> Stage2
+    Pipeline --> Stage3
+    Compliance --> Stage1
+    Compliance --> Stage2
+    Compliance --> Stage3
 ```
-Checkout Code → Build Image → Trivy Scan → Upload Results Artifact
-                                   ↓
-                        Fails on HIGH/CRITICAL CVEs
-```
-
----
-
-## Local Usage
-
-**Prerequisites:** Docker, Trivy
-
-**Build the image:**
-```bash
-docker build -f stage-1-docker/Dockerfile -t fastapi-app:stage1 .
-```
-
-**Run the container:**
-```bash
-docker run -p 8000:8000 --read-only --security-opt=no-new-privileges fastapi-app:stage1
-```
-
-**Access the app:**
-```
-Health:   http://localhost:8000/health
-Status:   http://localhost:8000/status
-API Docs: http://localhost:8000/docs
-```
-
-**Run Trivy locally:**
-```bash
-trivy image fastapi-app:stage1
-```
-
----
-
-## File Structure
-
-```
-stage-1-docker/
-├── README.md                          # This file
-├── .dockerignore                      # Excludes secrets, IaC, and IDE files
-└── .github/
-    └── workflows/
-        └── stage1-scan.yml            # Trivy scan pipeline
-
-app/                                   # Shared across all stages
-├── app.py                             # FastAPI application
-├── requirements.txt                   # Pinned dependencies
-└── Dockerfile                         # Hardened multi-stage build
-```
-
----
-
-## Related Writing
-
-- 📝 [Blog: Container Security Baselines](https://notesbynisha.com) *(coming soon)*
-- 💼 [Portfolio: From Docker to EKS](https://nishacloud.com) *(coming soon)*
 
 ---
 
 ## Project Navigation
 
-| | Stage | Platform |
+| Stage | Platform | Status | Focus |
+|---|---|---|---|
+| [Stage 1](./stage-1-docker/README.md) | Docker | ✅ Complete | Image hardening, baseline scanning |
+| [Stage 2](./stage-2-ecs-fargate/README.md) | Amazon ECS Fargate | 🔜 Coming soon | AWS-native security controls, CI/CD pipeline |
+| [Stage 3](./stage-3-eks/README.md) | Amazon EKS | 🔜 Coming soon | Policy enforcement, runtime detection, full compliance narrative |
+
+---
+
+## Repository Structure
+
+```
+container-security-progression/
+├── README.md                              # This file
+├── .trivyignore                           # Documented CVE exceptions with justification
+├── app/                                   # Shared FastAPI application (all stages)
+│   ├── app.py
+│   ├── requirements.txt
+│   └── Dockerfile
+├── stage-1-docker/
+│   ├── README.md
+│   └── .dockerignore
+├── stage-2-ecs-fargate/
+│   ├── README.md
+│   └── infra/                             # OpenTofu infrastructure
+├── stage-3-eks/
+│   ├── README.md
+│   ├── infra/                             # OpenTofu infrastructure
+│   └── policies/                          # Kyverno admission policies
+├── .github/
+│   └── workflows/
+│       ├── stage1-scan.yml                # Trivy image scan
+│       ├── stage2-pipeline.yml            # Trivy + Checkov + Gitleaks + deploy
+│       └── stage3-pipeline.yml            # Full pipeline + kubectl apply
+├── compliance/
+│   └── nist-800-53-mapping.md             # Cross-stage control mapping
+└── docs/
+    └── images/
+        ├── stage-1/
+        ├── stage-2/
+        └── stage-3/
+```
+
+---
+
+## Security Tooling
+
+| Category | Tool | Introduced |
 |---|---|---|
-| ← Previous | — | — |
-| **Current** | **Stage 1: Docker** | **Image hardening and baseline scanning** |
-| → Next | [Stage 2: ECS Fargate](../stage-2-ecs-fargate/README.md) | AWS-native security controls and CI/CD pipeline |
+| Image Scanning | Trivy | Stage 1 |
+| IaC Scanning | Checkov | Stage 2 |
+| Secret Detection | Gitleaks | Stage 2 |
+| Policy Enforcement | Kyverno | Stage 3 |
+| Runtime Detection | Falco | Stage 3 |
+| Threat Detection | Amazon GuardDuty | Stage 3 |
+| Secrets Management | AWS Secrets Manager | Stage 2 |
+| Infrastructure as Code | OpenTofu | Stage 2 |
+
+---
+
+## NIST 800-53 Control Coverage
+
+Controls are mapped progressively -- each stage introduces new or strengthened controls. Full mapping: [`compliance/nist-800-53-mapping.md`](./compliance/nist-800-53-mapping.md)
+
+| Family | Controls | Stages |
+|---|---|---|
+| AC - Access Control | AC-2, AC-3, AC-4, AC-6 | 1, 2, 3 |
+| AU - Audit and Accountability | AU-2, AU-12 | 2 |
+| CM - Configuration Management | CM-2, CM-3, CM-6, CM-7 | 1, 2, 3 |
+| IA - Identification and Authentication | IA-5 | 2 |
+| IR - Incident Response | IR-4 | 3 |
+| RA - Risk Assessment | RA-5 | 1 |
+| SA - System and Services Acquisition | SA-11 | 1, 3 |
+| SC - System and Communications Protection | SC-7, SC-8, SC-28 | 2 |
+| SI - System and Information Integrity | SI-2, SI-4, SI-7 | 1, 3 |
+
+---
+
+## Related Writing
+
+- 📝 [Blog: Stage 1 - Container Security Baselines](https://notesbynisha.com) *(coming soon)*
+- 📝 [Blog: Stage 2 - ECS Fargate Security Patterns](https://notesbynisha.com) *(coming soon)*
+- 💼 [Portfolio: From Docker to EKS](https://nishacloud.com) *(coming soon)*
