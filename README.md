@@ -8,6 +8,8 @@
 ![CI](https://github.com/nisha318/container-security-progression/actions/workflows/stage1-scan.yml/badge.svg)
 ![Trivy](https://img.shields.io/badge/Scanned%20by-Trivy-1904DA?style=flat-square)
 ![NIST](https://img.shields.io/badge/Compliance-NIST%20800--53-green?style=flat-square)
+![CIS](https://img.shields.io/badge/Compliance-CIS%20Docker-orange?style=flat-square)
+![Threat Model](https://img.shields.io/badge/Threat%20Model-STRIDE%20v1.7-purple?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)
 
 ---

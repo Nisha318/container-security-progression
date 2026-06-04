@@ -8,6 +8,8 @@
 ![CI](https://github.com/nisha318/container-security-progression/actions/workflows/stage1-scan.yml/badge.svg)
 ![Trivy](https://img.shields.io/badge/Scanned%20by-Trivy-1904DA?style=flat-square)
 ![NIST](https://img.shields.io/badge/Compliance-NIST%20800--53-green?style=flat-square)
+![CIS](https://img.shields.io/badge/Compliance-CIS%20Docker-orange?style=flat-square)
+![Threat Model](https://img.shields.io/badge/Threat%20Model-STRIDE%20v1.7-purple?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)
 
 ---
@@ -59,7 +61,7 @@ A lightweight **Python FastAPI** app serving as the consistent workload across a
 
 ---
 
-## NIST 800-53 Control Mapping
+## Security Controls and Compliance Mapping
 
 | Control ID | Control Name | Implementation |
 |---|---|---|
@@ -71,6 +73,7 @@ A lightweight **Python FastAPI** app serving as the consistent workload across a
 | SI-2 | Flaw Remediation | CVE severity threshold gates pipeline success, accepted risks documented in .trivyignore |
 
 > Full cross-stage control mapping: [`compliance/nist-800-53-mapping.md`](../compliance/nist-800-53-mapping.md)
+> CIS Docker Benchmark mapping: [`compliance/cis-docker-benchmark-mapping.md`](../compliance/cis-docker-benchmark-mapping.md)
 
 ---
 
