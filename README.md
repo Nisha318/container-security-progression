@@ -16,7 +16,7 @@
 
 A three-stage project demonstrating security-first container deployment patterns across Docker, Amazon ECS Fargate, and Amazon EKS. Each stage builds on the previous, with an evolving security posture and NIST 800-53 controls mapped throughout.
 
-**Workload:** A lightweight Python FastAPI app used as a consistent workload across all three stages. The app never changes -- the security wrapper around it does.
+**Workload:** A lightweight Python FastAPI app used as a consistent workload across all three stages. The application never changes -- the infrastructure and security posture around it do.
 
 **Primary controls demonstrated:** Least privilege IAM, secrets management, image scanning, network segmentation, runtime threat detection, and infrastructure as code security.
 
@@ -116,9 +116,10 @@ container-security-progression/
 │       ├── stage1-scan.yml                # Trivy image scan
 │       ├── stage2-pipeline.yml            # Trivy + Checkov + Gitleaks + deploy
 │       └── stage3-pipeline.yml            # Full pipeline + kubectl apply
-├── compliance/
-│   ├──  nist-800-53-mapping.md             # Cross-stage control mapping
-    └── threat-model.md
+├── compliance/ 
+│   ├── nist-800-53-mapping.md               # cross-stage control mapping
+│   ├── cis-docker-benchmark-mapping.md      # CIS Docker Benchmark mapping
+│   └── threat-model.md
     
 └── docs/
     └── images/
@@ -144,9 +145,10 @@ container-security-progression/
 
 ---
 
-## NIST 800-53 Control Coverage
+## Security Controls and Compliance Mapping
 
 Controls are mapped progressively -- each stage introduces new or strengthened controls. Full mapping: [`compliance/nist-800-53-mapping.md`](./compliance/nist-800-53-mapping.md)
+CIS Docker Benchmark mapping: [`compliance/cis-docker-benchmark-mapping.md`](./compliance/cis-docker-benchmark-mapping.md)
 
 Threat model: [`compliance/threat-model.md`](./compliance/threat-model.md)
 
