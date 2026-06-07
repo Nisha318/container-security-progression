@@ -1,6 +1,6 @@
 # From Docker to EKS: A Security-First Progression
 
-> **Author:** [Nisha](https://nishacloud.com) · [Notes by Nisha](https://notesbynisha.com)
+> **Author:** [Nisha M](https://nishacloud.com) · [Notes by Nisha](https://notesbynisha.com)
 
 ![Project](https://img.shields.io/badge/Project-Container%20Security%20Progression-blue?style=flat-square)
 ![Stages](https://img.shields.io/badge/Stages-3-blue?style=flat-square)
@@ -16,9 +16,9 @@
 
 ## Overview
 
-A three-stage project demonstrating security-first container deployment patterns across Docker, Amazon ECS Fargate, and Amazon EKS. Each stage builds on the previous, with an evolving security posture and NIST 800-53 controls mapped throughout.
+A three-stage project demonstrating security-first container deployment patterns across Docker, Amazon ECS Fargate, and Amazon EKS. Each stage builds on the previous, with an evolving security posture and NIST 800-53 controls and CIS Benchmarks throughout.
 
-**Workload:** A lightweight Python FastAPI app used as a consistent workload across all three stages. The application never changes -- the infrastructure and security posture around it do.
+**Workload:** A lightweight Python FastAPI app used as the same workload across all three stages. The application never changes, but the infrastructure and security posture around it does.
 
 **Primary controls demonstrated:** Least privilege IAM, secrets management, image scanning, network segmentation, runtime threat detection, and infrastructure as code security.
 
@@ -87,7 +87,7 @@ flowchart LR
 
 | Stage | Platform | Status | Focus |
 |---|---|---|---|
-| [Stage 1](./stage-1-docker/README.md) | Docker | ✅ Complete | Image hardening, baseline scanning |
+| [Stage 1](./stage-1-docker/README.md) | Docker | ✅ Complete | Container image security baseline, CVE scanning |
 | [Stage 2](./stage-2-ecs-fargate/README.md) | Amazon ECS Fargate | 🔜 Coming soon | AWS-native security controls, CI/CD pipeline |
 | [Stage 3](./stage-3-eks/README.md) | Amazon EKS | 🔜 Coming soon | Policy enforcement, runtime detection, full compliance narrative |
 
@@ -149,11 +149,13 @@ container-security-progression/
 
 ## Security Controls and Compliance Mapping
 
-Controls are mapped progressively -- each stage introduces new or strengthened controls. Full mapping: [`compliance/nist-800-53-mapping.md`](./compliance/nist-800-53-mapping.md)
-CIS Docker Benchmark mapping: [`compliance/cis-docker-benchmark-mapping.md`](./compliance/cis-docker-benchmark-mapping.md)
+Controls are mapped progressively where each stage introduces new or strengthened controls. 
 
-Threat model: [`compliance/threat-model.md`](./compliance/threat-model.md)
-
+| Document | Description |
+|---|---|
+| [`compliance/nist-800-53-mapping.md`](./compliance/nist-800-53-mapping.md) | Cross-stage NIST 800-53 control mapping |
+| [`compliance/cis-docker-benchmark-mapping.md`](./compliance/cis-docker-benchmark-mapping.md) | CIS Docker Benchmark v1.7.0 mapping |
+| [`compliance/threat-model.md`](./compliance/threat-model.md) | STRIDE threat model |
 
 | Family | Controls | Stages |
 |---|---|---|
@@ -171,6 +173,6 @@ Threat model: [`compliance/threat-model.md`](./compliance/threat-model.md)
 
 ## Related Writing
 
-- 📝 [Blog: Stage 1 - Container Security Baselines](https://notesbynisha.com) *(coming soon)*
+- 📝 [Blog: Stage 1 - Container Security Starts Before the Cloud](https://notesbynisha.com/blog/container-security-starts-before-the-cloud/) 
 - 📝 [Blog: Stage 2 - ECS Fargate Security Patterns](https://notesbynisha.com) *(coming soon)*
 - 💼 [Portfolio: From Docker to EKS](https://nishacloud.com) *(coming soon)*

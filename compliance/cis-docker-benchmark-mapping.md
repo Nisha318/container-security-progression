@@ -8,17 +8,19 @@
 
 ## Overview
 
-This document maps the container image hardening decisions made in Stage 1 to the CIS Docker Benchmark v1.7.0. The CIS Docker Benchmark is organized into sections covering host configuration, daemon configuration, and container images. Stage 1 focuses primarily on **Section 4 (Container Images)** as it covers the Dockerfile and image build decisions that are within scope for a local development and pipeline context.
+This document maps the container image security baseline decisions made in Stage 1 to the CIS Docker Benchmark v1.7.0. The CIS Docker Benchmark is organized into sections covering host configuration, daemon configuration, and container images. Stage 1 focuses primarily on **Section 4 (Container Images)** as it covers the Dockerfile and image build decisions that are within scope for a local development and pipeline context.
+
+The security baseline decisions in this project are grounded in **NIST SP 800-190 (Application Container Security Guide)**, which provides guidance specific to container image security, registry security, orchestration, and runtime protection. NIST SP 800-190 is the appropriate NIST reference for containerized application security. It is distinct from DISA STIGs, which address OS-level configuration hardening and are not directly applicable to container image design decisions.
 
 The benchmark uses two recommendation levels:
-- **Level 1** -- Practical, lower-risk recommendations that can be applied in most environments
-- **Level 2** -- More stringent recommendations that may impact functionality; defense in depth
+- **Level 1:** Practical, lower-risk recommendations that can be applied in most environments
+- **Level 2:** More stringent recommendations that may impact functionality; defense in depth
 
 ---
 
 ## Section 4: Container Images and Build Files
 
-Section 4 is the most directly relevant to Stage 1. It covers how container images are built, what they contain, and how they are configured.
+Section 4 is the most directly relevant to Stage 1 of this project. It covers how container images are built, what they contain, and how they are configured.
 
 ### 4.1 - Ensure a user for the container has been created
 **Level:** 1
@@ -54,7 +56,7 @@ The application process runs as UID 65532 with no elevated privileges. If the co
 
 **Status:** PASS
 
-**Implementation:** The distroless runtime base image contains only the Python 3.11 runtime and its minimum OS dependencies -- no shell, no package manager, no system utilities. The multi-stage build ensures that only application dependencies (FastAPI, Uvicorn, and their transitive dependencies) are present in the final image. No additional packages are installed at runtime.
+**Implementation:** The distroless runtime base image contains only the Python 3.11 runtime and its minimum OS dependencies. No shell, no package manager, no system utilities. The multi-stage build ensures that only application dependencies (FastAPI, Uvicorn, and their transitive dependencies) are present in the final image. No additional packages are installed at runtime.
 
 **Evidence:** `app/Dockerfile` - distroless base image, multi-stage build pattern
 
@@ -238,7 +240,7 @@ docker run -p 8000:8000 --read-only --security-opt=no-new-privileges fastapi-app
 ## Notes
 
 - CIS Docker Benchmark v1.7.0 (August 2024) was used for this mapping
-- Section 1 (Host Configuration) and Section 2 (Docker Daemon) are out of scope for Stage 1 -- these apply to the Docker host environment, not the container image
+- Section 1 (Host Configuration) and Section 2 (Docker Daemon) are out of scope for Stage 1. These apply to the Docker host environment, not the container image.
 - Section 3 (Docker Daemon Configuration Files) is out of scope for Stage 1
 - Full runtime controls (Section 5) are implemented in Stage 2 and Stage 3
 - This mapping is a learning artifact and portfolio reference, not a formal compliance assessment

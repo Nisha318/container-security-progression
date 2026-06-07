@@ -8,7 +8,7 @@
 
 ## 1. System Description
 
-This stage produces a hardened container image for a Python FastAPI application. The image is built locally on a developer workstation running WSL (Windows Subsystem for Linux) on Windows. The image is scanned for vulnerabilities using Trivy both locally and through a GitHub Actions CI/CD pipeline. At Stage 1, the image is not pushed to any registry and is not deployed to any cloud environment.
+This stage produces a security-baseline container image for a Python FastAPI application. The image is built locally on a developer workstation running WSL (Windows Subsystem for Linux) on Windows. The image is scanned for vulnerabilities using Trivy both locally and through a GitHub Actions CI/CD pipeline. At Stage 1, the image is not pushed to any registry and is not deployed to any cloud environment.
 
 **Assets in scope:**
 - Developer workstation (WSL on Windows)
@@ -106,7 +106,7 @@ Validated Image (local only -- no registry push at Stage 1)
 | STRIDE Category | NIST 800-53 Controls | Stage 1 Implementation |
 |---|---|---|
 | Spoofing | IA-5 (Authenticator Management) | Not yet implemented -- planned Stage 2/3 |
-| Tampering | CM-6, CM-7, RA-5, SA-11 | Dockerfile hardening, Trivy scanning, pinned dependencies, .dockerignore |
+| Tampering | CM-6, CM-7, RA-5, SA-11 | Dockerfile security controls, Trivy scanning, pinned dependencies, .dockerignore |
 | Repudiation | AU-2, AU-12 | Pipeline artifacts and git history provide build-time audit record |
 | Information Disclosure | AC-6, SI-2 | Non-root user, .dockerignore, Trivy secret scanning |
 | Denial of Service | RA-5, SI-2 | CVE threshold gates pipeline, accepted DoS-only CVEs documented in .trivyignore |
@@ -123,6 +123,7 @@ Validated Image (local only -- no registry push at Stage 1)
 - Image signing is deferred to Stage 3 where the full registry and deployment pipeline is in place
 - Base images are pulled from Docker Hub and Google Container Registry and are trusted but not cryptographically verified at Stage 1
 - This threat model covers the local build, local testing, and pipeline scan stages only
+- Container security decisions are grounded in NIST SP 800-190 (Application Container Security Guide), which is the appropriate NIST reference for containerized application security. DISA STIGs address OS-level configuration hardening and are not directly applicable to container image design.
 
 ---
 
@@ -141,6 +142,7 @@ This threat model grows with each stage as new components are introduced.
 ## Notes
 
 - Likelihood and impact ratings are qualitative (Low/Medium/High/Critical) based on the threat landscape for containerized workloads
+- Likelihood ratings informed by NIST SP 800-30 Rev 1 Appendix D qualitative likelihood tables; impact ratings for CVE-specific threats cross-referenced against CVSS base scores from NVD
 - This threat model is a living document reviewed and updated at the start of each stage
 - This document is intended as a learning artifact and portfolio reference, not a formal security assessment
 - Threat modeling framework: STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege)

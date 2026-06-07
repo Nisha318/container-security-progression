@@ -1,4 +1,4 @@
-# 🐳 Stage 1: Docker - Image Hardening & Security Baseline
+# 🐳 Stage 1: Docker - Container Image Security Baseline
 
 > **Project:** [From Docker to EKS: A Security-First Progression](../README.md)
 > **Author:** [Nisha](https://nishacloud.com) · [Notes by Nisha](https://notesbynisha.com)
@@ -16,15 +16,15 @@
 
 ## Overview
 
-This stage establishes the container image security baseline for the project. Before any cloud infrastructure is introduced, the application image is hardened, scanned, and validated through a GitHub Actions pipeline.
+This stage establishes the container image security baseline for the project. Before any cloud infrastructure is introduced, the application image is the application image is secured, scanned, and validated through a GitHub Actions pipeline.
 
-The same image built here is carried through **Stage 2 (ECS Fargate)** and **Stage 3 (EKS)** unchanged -- demonstrating that security starts at the image layer, not the orchestration layer.
+The same image built here is carried through **Stage 2 (ECS Fargate)** and **Stage 3 (EKS)** unchanged to demonstrate that security starts at the image layer, not the orchestration layer.
 
 ---
 
 ## Application
 
-A lightweight **Python FastAPI** app serving as the consistent workload across all three stages.
+A lightweight **Python FastAPI** app serving as the workload across all three stages.
 
 | Endpoint | Method | Description |
 |---|---|---|
@@ -74,6 +74,7 @@ A lightweight **Python FastAPI** app serving as the consistent workload across a
 
 > Full cross-stage control mapping: [`compliance/nist-800-53-mapping.md`](../compliance/nist-800-53-mapping.md)
 > CIS Docker Benchmark mapping: [`compliance/cis-docker-benchmark-mapping.md`](../compliance/cis-docker-benchmark-mapping.md)
+> Threat model: [`compliance/threat-model.md`](../compliance/threat-model.md)
 
 ---
 
@@ -142,7 +143,7 @@ container-security-progression/
 ├── app/                                   # Shared across all stages
 │   ├── app.py                             # FastAPI application
 │   ├── requirements.txt                   # Pinned dependencies
-│   └── Dockerfile                         # Hardened multi-stage build
+│   └── Dockerfile                         # Multi-stage distroless build
 ├── stage-1-docker/
 │   ├── README.md                          # This file
 │   └── .dockerignore                      # Excludes secrets, IaC, and IDE files
@@ -155,7 +156,7 @@ container-security-progression/
 
 ## Related Writing
 
-- 📝 [Blog: Container Security Baselines](https://notesbynisha.com) *(coming soon)*
+- 📝 [Blog: Container Security Starts Before the Cloud](https://notesbynisha.com/blog/container-security-starts-before-the-cloud/) 
 - 💼 [Portfolio: From Docker to EKS](https://nishacloud.com) *(coming soon)*
 
 ---
@@ -164,6 +165,5 @@ container-security-progression/
 
 | | Stage | Platform |
 |---|---|---|
-| Previous | -- | -- |
-| **Current** | **Stage 1: Docker** | **Image hardening and baseline scanning** |
-| Next | [Stage 2: ECS Fargate](../stage-2-ecs-fargate/README.md) | AWS-native security controls and CI/CD pipeline |
+| **Current** | **Stage 1: Docker** | **Container image security baseline and CVE scanning** |
+[Stage 2: ECS Fargate](../stage-2-ecs-fargate/README.md) | AWS-native security controls and CI/CD pipeline |
