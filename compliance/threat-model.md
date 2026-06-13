@@ -1,4 +1,4 @@
-# Threat Model: Stage 1 - Docker Image Hardening
+# Threat Model: Stage 1 - Docker Container Image Security Baseline
 **Project:** From Docker to EKS: A Security-First Progression
 **Stage:** 1 of 3 - Docker
 **Framework:** STRIDE
@@ -123,7 +123,7 @@ Validated Image (local only -- no registry push at Stage 1)
 - Image signing is deferred to Stage 3 where the full registry and deployment pipeline is in place
 - Base images are pulled from Docker Hub and Google Container Registry and are trusted but not cryptographically verified at Stage 1
 - This threat model covers the local build, local testing, and pipeline scan stages only
-- Container security decisions are grounded in NIST SP 800-190 (Application Container Security Guide), which is the appropriate NIST reference for containerized application security. DISA STIGs address OS-level configuration hardening and are not directly applicable to container image design.
+- Container security decisions are grounded in NIST SP 800-190 (Application Container Security Guide).
 
 ---
 

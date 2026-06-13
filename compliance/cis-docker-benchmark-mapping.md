@@ -10,7 +10,7 @@
 
 This document maps the container image security baseline decisions made in Stage 1 to the CIS Docker Benchmark v1.7.0. The CIS Docker Benchmark is organized into sections covering host configuration, daemon configuration, and container images. Stage 1 focuses primarily on **Section 4 (Container Images)** as it covers the Dockerfile and image build decisions that are within scope for a local development and pipeline context.
 
-The security baseline decisions in this project are grounded in **NIST SP 800-190 (Application Container Security Guide)**, which provides guidance specific to container image security, registry security, orchestration, and runtime protection. NIST SP 800-190 is the appropriate NIST reference for containerized application security. It is distinct from DISA STIGs, which address OS-level configuration hardening and are not directly applicable to container image design decisions.
+The security baseline decisions in this project are grounded in **NIST SP 800-190 (Application Container Security Guide)**, which is the NIST publication specifically focused on container security, and the CIS Docker Benchmark v1.7.0."
 
 The benchmark uses two recommendation levels:
 - **Level 1:** Practical, lower-risk recommendations that can be applied in most environments

@@ -17,7 +17,7 @@ This document maps security controls implemented across all three stages of the 
 
 ---
 
-## Stage 1: Docker - Image Hardening & Security Baseline
+## Stage 1: Docker - Container Image Security Baseline
 
 ### AC-6 - Least Privilege
 **Control:** The organization employs the principle of least privilege, allowing only authorized accesses for users and processes which are necessary to accomplish assigned tasks.
@@ -31,7 +31,7 @@ This document maps security controls implemented across all three stages of the 
 ### CM-6 - Configuration Settings
 **Control:** The organization establishes and documents configuration settings for information technology products employed within the information system.
 
-**Implementation:** Dockerfile defines a hardened, repeatable configuration enforced at every build. Multi-stage build separates dependency installation from runtime. No mutable configuration at runtime.
+**Implementation:** Dockerfile defines a standardized, repeatable configuration enforced at every build. Multi-stage build separates dependency installation from runtime. No mutable configuration at runtime.
 
 **Evidence:** `app/Dockerfile`
 
@@ -110,4 +110,4 @@ Controls to be documented upon Stage 3 completion:
 - Accepted risk entries in RA-5 are reviewed at the start of each subsequent stage
 - This mapping is intended as a learning artifact and portfolio reference, not a formal ATO package
 - All controls mapped to NIST SP 800-53 Rev 5
-- Container image security baseline decisions are grounded in NIST SP 800-190 (Application Container Security Guide). NIST SP 800-190 is the appropriate NIST reference for container security and is distinct from DISA STIGs, which address OS-level configuration hardening rather than container image design.
+- Container image security baseline decisions are grounded in **NIST SP 800-190 (Application Container Security Guide)**, which is the NIST publication specifically focused on container security, and the CIS Docker Benchmark v1.7.0.
