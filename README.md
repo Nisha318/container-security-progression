@@ -173,6 +173,6 @@ Controls are mapped progressively where each stage introduces new or strengthene
 
 ## Related Writing
 
-- 📝 [Blog: Stage 1 - Container Security Starts Before the Cloud](https://notesbynisha.com/blog/container-security-starts-before-the-cloud/) 
+- 📝 [Blog: Stage 1 - Container Security Starts Before the Cloud](https://notesbynisha.com/cloud%20security/devsecops/container-security-starts-before-the-cloud/) 
 - 📝 [Blog: Stage 2 - ECS Fargate Security Patterns](https://notesbynisha.com) *(coming soon)*
 - 💼 [Portfolio: From Docker to EKS](https://nishacloud.com) *(coming soon)*
