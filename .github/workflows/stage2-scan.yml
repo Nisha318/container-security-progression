@@ -61,7 +61,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build -t stage2-scan:${{ github.sha }} ./app
+        run: docker build -f app/Dockerfile -t stage2-scan:${{ github.sha }} .
 
       - name: Run Trivy image scan
         uses: aquasecurity/trivy-action@master
