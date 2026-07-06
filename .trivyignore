@@ -9,3 +9,11 @@ CVE-2026-40356
 # Tracked: pending distroless image update
 # Risk: DoS via http.client, not used directly in this application
 CVE-2025-13836
+
+# CVE-2026-45447 - OpenSSL heap use-after-free in PKCS7_verify()
+# Fix available in 3.0.20-1~deb12u2 but not yet included in distroless base image
+# Tracked: pending distroless image update
+# Risk: Heap UAF in PKCS7 signature verification. Application does not invoke
+# PKCS7 operations. TLS is terminated at the ALB; libssl3 in the container
+# is not exposed to external connections. Container isolated in private subnet.
+CVE-2026-45447
