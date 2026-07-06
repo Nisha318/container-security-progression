@@ -5,7 +5,8 @@
 ![Project](https://img.shields.io/badge/Project-Container%20Security%20Progression-blue?style=flat-square)
 ![Stages](https://img.shields.io/badge/Stages-3-blue?style=flat-square)
 ![IaC](https://img.shields.io/badge/IaC-OpenTofu-7B42BC?style=flat-square)
-![CI](https://github.com/nisha318/container-security-progression/actions/workflows/stage1-scan.yml/badge.svg)
+![CI Stage 1](https://github.com/nisha318/container-security-progression/actions/workflows/stage1-scan.yml/badge.svg)
+![CI Stage 2](https://github.com/nisha318/container-security-progression/actions/workflows/stage2-scan.yml/badge.svg)
 ![Trivy](https://img.shields.io/badge/Scanned%20by-Trivy-1904DA?style=flat-square)
 ![NIST](https://img.shields.io/badge/Compliance-NIST%20800--53-green?style=flat-square)
 ![CIS](https://img.shields.io/badge/Compliance-CIS%20Docker-orange?style=flat-square)
@@ -42,8 +43,10 @@ flowchart LR
         B2["ECS Fargate Task"]
         B3["Secrets Manager"]
         B4["Checkov + Gitleaks"]
+        B5["GuardDuty"]
         B4 --> B1 --> B2
         B3 --> B2
+        B5 --> B2
     end
 
     subgraph Stage3["Stage 3 - EKS"]
@@ -51,10 +54,8 @@ flowchart LR
         C1["EKS Private Cluster"]
         C2["Kyverno Policies"]
         C3["Falco Runtime"]
-        C4["GuardDuty"]
         C2 --> C1
         C3 --> C1
-        C4 --> C1
     end
 
     subgraph Pipeline["GitHub Actions Pipeline"]
@@ -88,7 +89,7 @@ flowchart LR
 | Stage | Platform | Status | Focus |
 |---|---|---|---|
 | [Stage 1](./stage-1-docker/README.md) | Docker | ✅ Complete | Container image security baseline, CVE scanning |
-| [Stage 2](./stage-2-ecs-fargate/README.md) | Amazon ECS Fargate | 🔜 Coming soon | AWS-native security controls, CI/CD pipeline |
+| [Stage 2](./stage-2-ecs-fargate/README.md) | Amazon ECS Fargate | ✅ Complete | AWS-native security controls, IaC scanning, secrets management, runtime detection |
 | [Stage 3](./stage-3-eks/README.md) | Amazon EKS | 🔜 Coming soon | Policy enforcement, runtime detection, full compliance narrative |
 
 ---
@@ -116,8 +117,8 @@ container-security-progression/
 ├── .github/
 │   └── workflows/
 │       ├── stage1-scan.yml                # Trivy image scan
-│       ├── stage2-pipeline.yml            # Trivy + Checkov + Gitleaks + deploy
-│       └── stage3-pipeline.yml            # Full pipeline + kubectl apply
+│       ├── stage2-scan.yml                # Trivy + Checkov + Gitleaks
+│       └── stage3-scan.yml                # Full pipeline + kubectl apply
 ├── compliance/ 
 │   ├── nist-800-53-mapping.md               # cross-stage control mapping
 │   ├── cis-docker-benchmark-mapping.md      # CIS Docker Benchmark mapping
@@ -141,7 +142,8 @@ container-security-progression/
 | Secret Detection | Gitleaks | Stage 2 |
 | Policy Enforcement | Kyverno | Stage 3 |
 | Runtime Detection | Falco | Stage 3 |
-| Threat Detection | Amazon GuardDuty | Stage 3 |
+| Threat Detection | Amazon GuardDuty | Stage 2 |
+| Operational Monitoring | CloudWatch Alarms + SNS | Stage 2 |
 | Secrets Management | AWS Secrets Manager | Stage 2 |
 | Infrastructure as Code | OpenTofu | Stage 2 |
 
@@ -165,9 +167,9 @@ Controls are mapped progressively where each stage introduces new or strengthene
 | IA - Identification and Authentication | IA-5 | 2 |
 | IR - Incident Response | IR-4 | 3 |
 | RA - Risk Assessment | RA-5 | 1 |
-| SA - System and Services Acquisition | SA-11 | 1, 3 |
+| SA - System and Services Acquisition | SA-11 | 1, 2, 3 |
 | SC - System and Communications Protection | SC-7, SC-8, SC-28 | 2 |
-| SI - System and Information Integrity | SI-2, SI-4, SI-7 | 1, 3 |
+| SI - System and Information Integrity | SI-2, SI-4, SI-7 | 1, 2, 3 |
 
 ---
 

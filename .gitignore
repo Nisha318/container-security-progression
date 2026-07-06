@@ -69,7 +69,7 @@ override.tf.json
 
 # Transient lock info files
 .terraform.tfstate.lock.info
-.terraform.lock.hcl
+
 
 # Plan output files
 *.tfplan

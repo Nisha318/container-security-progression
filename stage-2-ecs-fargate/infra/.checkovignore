@@ -1,0 +1,30 @@
+# .checkovignore
+# Accepted Checkov findings for stage-2-ecs-fargate/infra/
+# Format: CHECK_ID # Justification
+#
+# Each entry documents WHY the finding is accepted rather than remediated.
+# Review this file when findings are resolved upstream.
+
+# CKV_AWS_274: IAM policy uses wildcard resource
+# ecr:GetAuthorizationToken is an AWS API that does not support resource-level
+# permissions. The token is account-wide by design. This is an AWS constraint,
+# not a misconfiguration. Affects: task execution role, GitHub Actions role.
+CKV_AWS_274
+
+# CKV_AWS_91: ALB access logging not enabled
+# Access logs require a dedicated S3 bucket with a specific bucket policy.
+# Out of scope for this development deployment. Enable for production.
+CKV_AWS_91
+
+# CKV2_AWS_57: Secrets Manager secret does not have automatic rotation
+# The app-config secret holds application configuration values, not credentials
+# with a known rotation mechanism (e.g. RDS passwords). Rotation is a manual
+# process for this secret type. For database credentials, use an AWS-managed
+# rotation Lambda via aws_secretsmanager_secret_rotation.
+CKV2_AWS_57
+
+# CKV_AWS_150: ALB deletion protection not enabled
+# Deletion protection is appropriate for production load balancers.
+# Disabled here to allow clean teardown of development infrastructure via
+# tofu destroy without manual intervention.
+CKV_AWS_150

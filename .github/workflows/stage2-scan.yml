@@ -1,0 +1,125 @@
+name: Stage 2 Security Scan
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'stage-2-ecs-fargate/**'
+      - '.github/workflows/stage2-scan.yml'
+      - '.trivyignore'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'stage-2-ecs-fargate/**'
+      - '.github/workflows/stage2-scan.yml'
+      - '.trivyignore'
+
+permissions:
+  contents: read
+
+jobs:
+
+  # ---------------------------------------------------------------------------
+  # Job 1: Secret Detection
+  # Runs first and gates all other jobs. If a secret is found in source control
+  # there is no point scanning the image or validating the infrastructure.
+  # fetch-depth: 0 scans the full commit history, not just the latest commit.
+  # A secret committed and later deleted is still a secret that needs rotating.
+  # ---------------------------------------------------------------------------
+  gitleaks:
+    name: Secret Detection (Gitleaks)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ---------------------------------------------------------------------------
+  # Job 2: Image Scan
+  # Builds the Docker image and scans it with Trivy. Same gate as Stage 1:
+  # zero HIGH or CRITICAL findings. Accepted findings documented in .trivyignore.
+  # Runs in parallel with checkov and tofu-validate after gitleaks passes.
+  # ---------------------------------------------------------------------------
+  trivy-image-scan:
+    name: Image Scan (Trivy)
+    runs-on: ubuntu-latest
+    needs: gitleaks
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t stage2-scan:${{ github.sha }} ./app
+
+      - name: Run Trivy image scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: stage2-scan:${{ github.sha }}
+          format: table
+          exit-code: '1'
+          severity: HIGH,CRITICAL
+          trivyignores: .trivyignore
+          ignore-unfixed: true
+
+  # ---------------------------------------------------------------------------
+  # Job 3: IaC Scan
+  # Scans the OpenTofu configuration in stage-2-ecs-fargate/infra/ for
+  # misconfigurations. Accepted findings are documented in infra/.checkovignore
+  # with justification for each skipped check.
+  # ---------------------------------------------------------------------------
+  checkov-scan:
+    name: IaC Scan (Checkov)
+    runs-on: ubuntu-latest
+    needs: gitleaks
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: stage-2-ecs-fargate/infra
+          framework: terraform
+          output_format: cli
+          soft_fail: false
+
+  # ---------------------------------------------------------------------------
+  # Job 4: IaC Validate
+  # Runs tofu validate to catch syntax errors and misconfigured references
+  # without connecting to AWS. -backend=false skips S3 state initialization
+  # so no AWS credentials are required in the scan pipeline.
+  # ---------------------------------------------------------------------------
+  tofu-validate:
+    name: IaC Validate (OpenTofu)
+    runs-on: ubuntu-latest
+    needs: gitleaks
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: "1.6.0"
+
+      - name: OpenTofu Init
+        run: tofu init -backend=false
+        working-directory: stage-2-ecs-fargate/infra
+
+      - name: OpenTofu Validate
+        run: tofu validate
+        working-directory: stage-2-ecs-fargate/infra
