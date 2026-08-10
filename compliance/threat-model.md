@@ -3,6 +3,25 @@
 **Stages Covered:** 1 (Docker) and 2 (ECS Fargate)
 **Framework:** STRIDE
 **Last Updated:** Stage 2 complete
+---
+
+## Table of Contents
+
+- [1. System Description](#1-system-description)
+- [2. Architecture Overview](#2-architecture-overview)
+- [3. Data Flow Diagram](#3-data-flow-diagram)
+- [4. Threat Model](#4-threat-model)
+  - [Stage 1: Docker Threat Analysis](#stage-1-docker-threat-analysis)
+  - [Stage 2: ECS Fargate Threat Analysis](#stage-2-ecs-fargate-threat-analysis)
+- [5. Residual Risk Summary](#5-residual-risk-summary)
+  - [Stage 1](#stage-1)
+  - [Stage 2](#stage-2)
+- [6. STRIDE to NIST 800-53 Mapping](#6-stride-to-nist-800-53-mapping)
+- [7. Assumptions and Constraints](#7-assumptions-and-constraints)
+- [8. Threat Model Evolution](#8-threat-model-evolution)
+- [Notes](#notes)
+
+---
 
 ---
 
