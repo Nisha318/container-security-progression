@@ -17,3 +17,25 @@ CVE-2025-13836
 # PKCS7 operations. TLS is terminated at the ALB; libssl3 in the container
 # is not exposed to external connections. Container isolated in private subnet.
 CVE-2026-45447
+
+# CVE-2026-40355 - krb5 NULL pointer dereference DoS
+# Sibling of CVE-2026-40356. Same fix version (1.20.1-2+deb12u5) not yet
+# included in distroless base image. Tracked: pending distroless image update.
+# Risk: DoS only, no code execution. Application does not use Kerberos.
+CVE-2026-40355
+
+# CVE-2026-4224 - cpython stack overflow in XML DTD parsing
+# Fix available in 3.11.2-6+deb12u8 but not yet included in distroless base image
+# Tracked: pending distroless image update
+# Risk: Stack overflow when parsing XML with deeply nested DTD content models.
+# Application has no XML parsing. Vulnerable code path is not reachable.
+CVE-2026-4224
+
+# CVE-2026-6100 - Python use-after-free in decompression
+# Fix available in 3.11.2-6+deb12u8 but not yet included in distroless base image
+# Tracked: pending distroless image update
+# Risk: Use-after-free in decompression with potential for arbitrary code execution.
+# Application does not perform decompression operations. The two FastAPI endpoints
+# return static JSON only. No file handling, archive processing, or compression
+# library calls exist in the codebase. Vulnerable code path is not reachable.
+CVE-2026-6100
