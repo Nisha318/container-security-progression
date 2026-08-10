@@ -201,10 +201,3 @@ tofu apply
 | **Stage 2 - ECS Fargate** | AWS-native security controls, IaC scanning, secrets management, runtime detection | ✅ Complete |
 | [Stage 3 - EKS](../stage-3-eks/README.md) | Kubernetes, managed cluster, IAM integration | 🔜 Planned |
 
----
-
-## Related Writing
-
-- 📝 [Blog: Why Fargate? Lifting Docker Into AWS](#) - *notesbynisha.com (coming soon)*
-- 📝 [Blog: IaC Security with OpenTofu + Checkov](#) - *notesbynisha.com (coming soon)*
-- 📝 [Blog: No More .env Files - Secrets Manager in ECS](#) - *notesbynisha.com (coming soon)*
