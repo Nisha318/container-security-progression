@@ -25,6 +25,60 @@ CKV2_AWS_57
 
 # CKV_AWS_150: ALB deletion protection not enabled
 # Deletion protection is appropriate for production load balancers.
-# Disabled here to allow clean teardown of development infrastructure via
-# tofu destroy without manual intervention.
+# Disabled here to allow clean teardown of development infrastructure
+# without manual intervention.
 CKV_AWS_150
+
+# CKV_AWS_338: CloudWatch log group retention less than 1 year
+# 30-day retention on the ECS log group and 90-day retention on VPC flow logs
+# are appropriate for a development deployment. Production workloads subject
+# to compliance requirements should use 365 days or longer.
+CKV_AWS_338
+
+# CKV_AWS_290: IAM policy allows write access without constraints
+# CKV_AWS_355: IAM policy uses wildcard resource for restrictable actions
+# The GitHub Actions deployment role requires ecs:RegisterTaskDefinition and
+# ecs:DescribeServices with Resource = "*" — AWS does not support resource-level
+# permissions for these ECS API actions. This is an AWS constraint.
+CKV_AWS_290
+CKV_AWS_355
+
+# CKV_AWS_382: Security group allows unrestricted egress
+# The ALB security group requires unrestricted egress to forward traffic to
+# ECS tasks across the private subnet CIDR. The ECS tasks security group
+# requires unrestricted egress to reach VPC endpoints and the NAT gateway
+# for outbound traffic. Scoping egress to specific CIDRs would require
+# hardcoding subnet ranges that are already parameterized as variables.
+CKV_AWS_382
+
+# CKV_AWS_260: Security group allows ingress from 0.0.0.0/0 on port 80
+# Port 80 ingress is required on the ALB security group to receive HTTP
+# requests and issue a 301 redirect to HTTPS. Blocking port 80 entirely
+# would prevent the redirect and break the user experience for HTTP clients.
+CKV_AWS_260
+
+# CKV2_AWS_12: VPC default security group does not restrict all traffic
+# Remediating this requires an explicit aws_default_security_group resource
+# to override the AWS-managed default. Deferred for development scope.
+# Add aws_default_security_group with no ingress/egress rules for production.
+CKV2_AWS_12
+
+# CKV2_AWS_28: Public-facing ALB not protected by WAF
+# WAF adds meaningful cost and operational overhead. Appropriate for
+# production workloads. Out of scope for this development deployment.
+CKV2_AWS_28
+
+# CKV2_AWS_3: GuardDuty not enabled to specific org/region
+# This check targets multi-account AWS Organizations deployments where
+# GuardDuty is delegated to a central security account. This is a
+# single-account personal project. GuardDuty is enabled and Runtime
+# Monitoring is active. The finding does not apply to this architecture.
+CKV2_AWS_3
+
+# CKV2_AWS_64: KMS key policy not explicitly defined
+# Applies to the ECR and Secrets Manager KMS keys. AWS default key policy
+# grants account root full access and relies on IAM for all other access
+# control. Access to these keys is governed by the task execution role
+# and GitHub Actions role policies. An explicit key policy would be
+# redundant without adding meaningful security benefit in this context.
+CKV2_AWS_64

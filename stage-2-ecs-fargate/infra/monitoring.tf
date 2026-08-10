@@ -6,7 +6,8 @@
 # -----------------------------------------------------------------------------
 
 resource "aws_sns_topic" "alarms" {
-  name = "${var.project_name}-${var.environment}-alarms"
+  name              = "${var.project_name}-${var.environment}-alarms"
+  kms_master_key_id = aws_kms_key.logs.arn
 
   tags = {
     Name = "${var.project_name}-${var.environment}-alarms"

@@ -196,7 +196,7 @@ resource "aws_security_group" "ecs_tasks" {
 resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
   name              = "/aws/vpc/flow-logs/${var.project_name}-${var.environment}"
   retention_in_days = 90
-
+  kms_key_id        = aws_kms_key.logs.arn
   tags = {
     Name = "${var.project_name}-${var.environment}-vpc-flow-logs"
   }

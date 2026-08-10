@@ -95,6 +95,20 @@ jobs:
           framework: terraform
           output_format: cli
           soft_fail: false
+          skip_check: >-
+          CKV_AWS_274,
+          CKV_AWS_91,
+          CKV2_AWS_57,
+          CKV_AWS_150,
+          CKV_AWS_338,
+          CKV_AWS_290,
+          CKV_AWS_355,
+          CKV_AWS_382,
+          CKV_AWS_260,
+          CKV2_AWS_12,
+          CKV2_AWS_28,
+          CKV2_AWS_3,
+          CKV2_AWS_64
 
   # ---------------------------------------------------------------------------
   # Job 4: IaC Validate
