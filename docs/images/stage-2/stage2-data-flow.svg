@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="560" viewBox="0 0 680 560" font-family="system-ui, -apple-system, sans-serif">
+
+  <!-- Background -->
+  <rect width="680" height="560" fill="#FAFAF9"/>
+
+  <!-- Title -->
+  <text x="340" y="22" text-anchor="middle" font-size="14" font-weight="600" fill="#1C1B18">Stage 2: ECS Fargate Data Flow</text>
+
+  <!-- ===================== PHASE 1 ===================== -->
+  <text x="340" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#444">Phase 1: Developer push and CI/CD pipeline</text>
+
+  <!-- Developer -->
+  <rect x="16" y="58" width="105" height="44" rx="6" fill="#F1F0EB" stroke="#888" stroke-width="1.5"/>
+  <text x="68" y="76" text-anchor="middle" font-size="12" font-weight="600" fill="#333">Developer</text>
+  <text x="68" y="92" text-anchor="middle" font-size="10" fill="#555">git push</text>
+
+  <!-- Arrow 1 -->
+  <line x1="121" y1="80" x2="145" y2="80" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- GitHub Actions -->
+  <rect x="147" y="58" width="140" height="44" rx="6" fill="#F1F0EB" stroke="#888" stroke-width="1.5"/>
+  <text x="217" y="76" text-anchor="middle" font-size="12" font-weight="600" fill="#333">GitHub Actions</text>
+  <text x="217" y="92" text-anchor="middle" font-size="10" fill="#555">Gitleaks, Trivy, Checkov</text>
+
+  <!-- Arrow 2 -->
+  <line x1="287" y1="80" x2="311" y2="80" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- ECR push -->
+  <rect x="313" y="58" width="140" height="44" rx="6" fill="#CCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+  <text x="383" y="76" text-anchor="middle" font-size="12" font-weight="600" fill="#14532D">ECR push</text>
+  <text x="383" y="92" text-anchor="middle" font-size="10" fill="#14532D">OIDC, no stored keys</text>
+
+  <!-- Arrow 3 -->
+  <line x1="453" y1="80" x2="477" y2="80" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- ECS update -->
+  <rect x="479" y="58" width="170" height="44" rx="6" fill="#CCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+  <text x="564" y="76" text-anchor="middle" font-size="12" font-weight="600" fill="#14532D">ECS service update</text>
+  <text x="564" y="92" text-anchor="middle" font-size="10" fill="#14532D">New task definition revision</text>
+
+  <!-- Divider arrow down -->
+  <line x1="340" y1="102" x2="340" y2="124" stroke="#BBB" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- ===================== PHASE 2 ===================== -->
+  <text x="340" y="140" text-anchor="middle" font-size="12" font-weight="600" fill="#444">Phase 2: Task bootstrap (runs every time a container starts)</text>
+
+  <!-- ECS Agent -->
+  <rect x="16" y="150" width="120" height="44" rx="6" fill="#F1F0EB" stroke="#888" stroke-width="1.5"/>
+  <text x="76" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#333">ECS agent</text>
+  <text x="76" y="184" text-anchor="middle" font-size="10" fill="#555">Uses execution role</text>
+
+  <!-- Step label 1 -->
+  <text x="148" y="163" text-anchor="middle" font-size="11" font-weight="600" fill="#7C3AED">1</text>
+  <!-- Arrow -->
+  <line x1="136" y1="172" x2="158" y2="172" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- ECR pull -->
+  <rect x="160" y="150" width="135" height="44" rx="6" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+  <text x="227" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#78350F">ECR image pull</text>
+  <text x="227" y="184" text-anchor="middle" font-size="10" fill="#78350F">via endpoint, private</text>
+
+  <!-- Step label 2 -->
+  <text x="311" y="163" text-anchor="middle" font-size="11" font-weight="600" fill="#7C3AED">2</text>
+  <!-- Arrow -->
+  <line x1="295" y1="172" x2="321" y2="172" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- Secret injection -->
+  <rect x="323" y="150" width="155" height="44" rx="6" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+  <text x="400" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#78350F">Secret injection</text>
+  <text x="400" y="184" text-anchor="middle" font-size="10" fill="#78350F">Secrets Manager, private</text>
+
+  <!-- Step label 3 -->
+  <text x="491" y="163" text-anchor="middle" font-size="11" font-weight="600" fill="#7C3AED">3</text>
+  <!-- Arrow -->
+  <line x1="478" y1="172" x2="502" y2="172" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- Container starts -->
+  <rect x="504" y="150" width="155" height="44" rx="6" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+  <text x="581" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#4C1D95">Container starts</text>
+  <text x="581" y="184" text-anchor="middle" font-size="10" fill="#4C1D95">App reads env vars</text>
+
+  <!-- Divider arrow down -->
+  <line x1="340" y1="194" x2="340" y2="216" stroke="#BBB" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- ===================== PHASE 3 ===================== -->
+  <text x="340" y="232" text-anchor="middle" font-size="12" font-weight="600" fill="#444">Phase 3: Runtime traffic</text>
+
+  <!-- User browser -->
+  <rect x="16" y="242" width="115" height="44" rx="6" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <text x="73" y="260" text-anchor="middle" font-size="12" font-weight="600" fill="#1E40AF">User browser</text>
+  <text x="73" y="276" text-anchor="middle" font-size="10" fill="#1E40AF">HTTP request</text>
+
+  <!-- Arrow -->
+  <line x1="131" y1="264" x2="155" y2="264" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- ALB -->
+  <rect x="157" y="242" width="135" height="44" rx="6" fill="#CCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+  <text x="224" y="260" text-anchor="middle" font-size="12" font-weight="600" fill="#14532D">ALB</text>
+  <text x="224" y="276" text-anchor="middle" font-size="10" fill="#14532D">Routes to port 8000</text>
+
+  <!-- Arrow -->
+  <line x1="292" y1="264" x2="316" y2="264" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- FastAPI container -->
+  <rect x="318" y="242" width="165" height="44" rx="6" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+  <text x="400" y="260" text-anchor="middle" font-size="12" font-weight="600" fill="#4C1D95">FastAPI container</text>
+  <text x="400" y="276" text-anchor="middle" font-size="10" fill="#4C1D95">Handles request</text>
+
+  <!-- Down arrow from container -->
+  <line x1="400" y1="286" x2="400" y2="318" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- Two outputs box -->
+  <rect x="318" y="320" width="165" height="44" rx="6" fill="none" stroke="#AAA" stroke-width="1"/>
+  <text x="400" y="338" text-anchor="middle" font-size="12" font-weight="600" fill="#444">Two outputs</text>
+  <text x="400" y="355" text-anchor="middle" font-size="10" fill="#666">Response + logs</text>
+
+  <!-- Left arrow: response -->
+  <line x1="318" y1="348" x2="262" y2="382" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+  <!-- Right arrow: logs -->
+  <line x1="483" y1="348" x2="524" y2="382" stroke="#555" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- HTTP Response -->
+  <rect x="150" y="384" width="165" height="44" rx="6" fill="#CCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+  <text x="232" y="402" text-anchor="middle" font-size="12" font-weight="600" fill="#14532D">HTTP response</text>
+  <text x="232" y="418" text-anchor="middle" font-size="10" fill="#14532D">Back to browser via ALB</text>
+
+  <!-- CloudWatch Logs -->
+  <rect x="524" y="384" width="140" height="44" rx="6" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+  <text x="594" y="402" text-anchor="middle" font-size="12" font-weight="600" fill="#78350F">CloudWatch Logs</text>
+  <text x="594" y="418" text-anchor="middle" font-size="10" fill="#78350F">via endpoint, private</text>
+
+  <!-- ===================== GUARDDUTY FOOTER ===================== -->
+  <rect x="16" y="452" width="640" height="52" rx="8" fill="#FEF3C7" stroke="#D97706" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="340" y="472" text-anchor="middle" font-size="12" font-weight="600" fill="#78350F">Throughout runtime: GuardDuty monitoring</text>
+  <text x="340" y="490" text-anchor="middle" font-size="11" fill="#92400E">Agent inside task monitors process execution, network connections, and file access in near-real-time</text>
+
+  <!-- Defs -->
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+</svg>

@@ -33,7 +33,7 @@ The application itself does not change between stages. The same Python FastAPI i
 | Base image | `gcr.io/distroless/python3-debian12` | Same |
 | Image scan | Trivy (0 HIGH/CRITICAL gate) | Same |
 | Non-root user | UID 65532 | Same |
-| IaC | None | OpenTofu (VPC, ECR, IAM, ECS, Secrets Manager, Monitoring, Guardduty, Endpoints) |
+| IaC | None | OpenTofu (VPC, ECR, IAM, ECS, Secrets Manager, Monitoring, GuardDuty, Endpoints) |
 | IaC scanning | None | Checkov |
 | Secret detection | None | Gitleaks |
 | Compute surface | Local Docker | AWS Fargate (serverless, no host to manage) |
@@ -58,7 +58,7 @@ The application itself does not change between stages. The same Python FastAPI i
 - **Private subnets** for all ECS tasks; only the ALB lives in a public subnet
 - **ECR with tag immutability** prevents image tampering after push
 - **Secrets Manager** replaces plaintext environment variables - no secrets in task definitions, no secrets in source control
-- **Two separate IAM roles**: The task execution role is used by the ECS agent to bootstrap the container - it needs permission to pull the image from ECR and write logs to CloudWatch. The task role is used by the application code at runtime - scoped only to what the app actually calls (in this case, a specific Secrets Manager path). These are intentionally separate: if the application is compromised at runtime, the attacker gets the task role only, not the ability to pull other images or write to infrastructure logs.
+- **Two separate IAM roles**: The task execution role is used by the ECS agent to bootstrap the container.  It needs permission to pull the image from ECR and write logs to CloudWatch. The task role is used by the application code at runtime. The application makes no AWS API calls, so the task role has no permissions. If an attacker gets into the application at runtime, the attacker gets a role with no AWS access.
 
 ---
 
@@ -140,10 +140,10 @@ container-security-progression/
 │       ├── ecr.tf
 │       ├── iam.tf
 │       ├── secrets.tf
-        ├── dns.tf
+│       ├── dns.tf
 │       ├── ecs.tf
 │       ├── guardduty.tf
-        ├── monitoring.tf
+│       ├── monitoring.tf
 │       └── .checkovignore
 │
 ├── compliance/
@@ -197,7 +197,7 @@ tofu apply
 
 | Stage | Focus | Status |
 |---|---|---|
-| [Stage 1 - Docker](../stage-1-docker/README.md) | Hardened image, Trivy scan, distroless base | ✅ Complete |
+| [Stage 1 - Docker](../stage-1-docker/README.md) | Container image security baseline, Trivy scan, distroless base | ✅ Complete |
 | **Stage 2 - ECS Fargate** | AWS-native security controls, IaC scanning, secrets management, runtime detection | ✅ Complete |
 | [Stage 3 - EKS](../stage-3-eks/README.md) | Kubernetes, managed cluster, IAM integration | 🔜 Planned |
 
